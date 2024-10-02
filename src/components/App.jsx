@@ -1,4 +1,6 @@
-import React , {useState} from "react";
+import React, { useState } from "react";
+import ToDoItem from "./ToDoItem";
+import InputArea from "./InputArea";
 
 //CHALLENGE: Make this app work by applying what you've learnt.
 //1. When new text is written into the input, its state should be saved.
@@ -6,42 +8,50 @@ import React , {useState} from "react";
 //added to an array.
 //3. The <ul> should display all the array items as <li>s
 
-function App() {
-  const [text, settext]= useState("");
-const [item , setitem] =useState([]);
 
-  function update(event){
-    const newvalue =event.target.value;
-    settext(newvalue);
+//Challenge  extracted parts form app and put in INputArea 
+//1.You will need to think about how to manage the state of the input element in INputArea.jsx 
+//2.You will need to think about how to pass th einput value back into the adddItem() function in App.jsx 
+function App() {
+
+  const [item, setitem] = useState([]);
+
+
+
+  function addItem(text) {
+    setitem((previtem) => {
+      return [...previtem, text];
+    });
+    settext("");
   }
 
-
-function Click(event){
-  const {datad} =event.target;
-  setitem((data)=>{
-  
-  };) 
-}
-
-
+  function deleteItem(id) {
+    // console.log("item called delete ");
+    // console.log(id);
+    setitem((previtem) => {
+      return previtem.filter((item, index) => {
+        return index !== id;
+      });
+    });
+  }
 
   return (
     <div className="container">
       <div className="heading">
         <h1>To-Do List</h1>
       </div>
-      <div className="form">
-        <input type="text" onChange={update} value={text}/>
-        
-        <button onClick={"Click"}>
-          <span>Add</span>
-        </button>
-      </div>
+      <InputArea    
+      onAdd={addItem} />
       <div>
         <ul>
-          {items.map((todoitem) => {
-            return <li>{todoitem} </li>;
-          })}
+          {item.map((todoitem, index) => (
+            <ToDoItem
+              key={index}
+              id={index}
+              text={todoitem}
+              onChecked={deleteItem}
+            />
+          ))}
         </ul>
       </div>
     </div>
